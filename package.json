@@ -1,12 +1,11 @@
 {
-  "name": "@segment/analytics.js-integration-segmentio",
-  "description": "The Segmentio analytics.js integration.",
+  "name": "@segment/analytics.js-integration-prezly",
+  "description": "The Prezly analytics.js integration.",
   "version": "3.5.4",
   "keywords": [
     "analytics.js",
     "analytics.js-integration",
-    "segment",
-    "segmentio"
+    "prezly",
   ],
   "main": "lib/index.js",
   "scripts": {
@@ -14,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/segment-integrations/analytics.js-integration-segmentio.git"
+    "url": "git+https://github.com/prezly/analytics.js-integration-prezly.git"
   },
   "author": "Segment <friends@segment.com>",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/segment-integrations/analytics.js-integration-segmentio/issues"
+    "url": "https://github.com/prezly/analytics.js-integration-prezly/issues"
   },
-  "homepage": "https://github.com/segment-integrations/analytics.js-integration-segmentio#readme",
+  "homepage": "https://github.com/prezly/analytics.js-integration-prezly#readme",
   "dependencies": {
     "@ndhoule/extend": "^2.0.0",
     "@ndhoule/keys": "^2.0.0",
