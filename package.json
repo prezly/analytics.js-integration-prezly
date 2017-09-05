@@ -7,7 +7,7 @@
     "analytics.js-integration",
     "prezly"
   ],
-  "main": "lib/index.js",
+  "main": "integration.js",
   "scripts": {
     "test": "make test",
     "compile": "browserify lib/index.js  --standalone PrezlyIntegration > integration.js",
