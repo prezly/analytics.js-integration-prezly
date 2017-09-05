@@ -2,10 +2,17 @@
   "name": "analytics.js-integration-prezly",
   "description": "The Prezly analytics.js integration.",
   "version": "3.5.4",
-  "keywords": ["analytics.js", "analytics.js-integration", "prezly"],
+  "keywords": [
+    "analytics.js",
+    "analytics.js-integration",
+    "prezly"
+  ],
   "main": "lib/index.js",
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "compile": "browserify lib/index.js  --standalone PrezlyIntegration > integration.js",
+    "minify": "browserify -t envify -t uglifyify integration.js -o integration.min.js",
+    "build": "npm run compile && npm run minify"
   },
   "repository": {
     "type": "git",
@@ -16,8 +23,7 @@
   "bugs": {
     "url": "https://github.com/prezly/analytics.js-integration-prezly/issues"
   },
-  "homepage":
-    "https://github.com/prezly/analytics.js-integration-prezly#readme",
+  "homepage": "https://github.com/prezly/analytics.js-integration-prezly#readme",
   "dependencies": {
     "@ndhoule/extend": "^2.0.0",
     "@ndhoule/keys": "^2.0.0",
@@ -41,8 +47,9 @@
     "@segment/analytics.js-integration-tester": "^2.0.0",
     "@segment/clear-env": "^2.0.0",
     "@segment/eslint-config": "^3.1.1",
-    "browserify": "^13.0.0",
+    "browserify": "^13.3.0",
     "browserify-istanbul": "^2.0.0",
+    "envify": "^4.1.0",
     "eslint": "^2.9.0",
     "eslint-plugin-mocha": "^2.2.0",
     "eslint-plugin-require-path-exists": "^1.1.5",
@@ -61,6 +68,9 @@
     "phantomjs-prebuilt": "^2.1.7",
     "proclaim": "^3.4.1",
     "sinon": "^1.17.4",
+    "uglify-es": "^3.0.28",
+    "uglify-js": "^3.0.28",
+    "uglifyify": "^4.0.3",
     "watchify": "^3.7.0"
   }
 }
