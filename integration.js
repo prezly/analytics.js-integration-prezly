@@ -1,25 +1,25 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.PrezlyIntegration = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.PrezlyIntegration = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(_dereq_,module,exports){
 'use strict';
 
 /**
  * Module dependencies.
  */
 
-var ads = require('@segment/ad-params');
-var clone = require('component-clone');
-var cookie = require('component-cookie');
-var extend = require('@ndhoule/extend');
-var integration = require('@segment/analytics.js-integration');
-var json = require('json3');
-var keys = require('@ndhoule/keys');
-var localstorage = require('yields-store');
-var md5 = require('spark-md5').hash;
-var protocol = require('@segment/protocol');
-var send = require('@segment/send-json');
-var topDomain = require('@segment/top-domain');
-var utm = require('@segment/utm-params');
-var uuid = require('uuid').v4;
-var Queue = require('@segment/localstorage-retry');
+var ads = _dereq_('@segment/ad-params');
+var clone = _dereq_('component-clone');
+var cookie = _dereq_('component-cookie');
+var extend = _dereq_('@ndhoule/extend');
+var integration = _dereq_('@segment/analytics.js-integration');
+var json = _dereq_('json3');
+var keys = _dereq_('@ndhoule/keys');
+var localstorage = _dereq_('yields-store');
+var md5 = _dereq_('spark-md5').hash;
+var protocol = _dereq_('@segment/protocol');
+var send = _dereq_('@segment/send-json');
+var topDomain = _dereq_('@segment/top-domain');
+var utm = _dereq_('@segment/utm-params');
+var uuid = _dereq_('uuid').v4;
+var Queue = _dereq_('@segment/localstorage-retry');
 
 /**
  * Cookie options
@@ -504,14 +504,14 @@ function getTld(domain) {
   return domain.split('.').splice(-2).join('.');
 }
 
-},{"@ndhoule/extend":9,"@ndhoule/keys":12,"@segment/ad-params":14,"@segment/analytics.js-integration":15,"@segment/localstorage-retry":22,"@segment/protocol":31,"@segment/send-json":32,"@segment/top-domain":33,"@segment/utm-params":34,"component-clone":37,"component-cookie":38,"json3":52,"spark-md5":60,"uuid":66,"yields-store":67}],2:[function(require,module,exports){
+},{"@ndhoule/extend":9,"@ndhoule/keys":12,"@segment/ad-params":14,"@segment/analytics.js-integration":15,"@segment/localstorage-retry":22,"@segment/protocol":31,"@segment/send-json":32,"@segment/top-domain":33,"@segment/utm-params":34,"component-clone":37,"component-cookie":38,"json3":52,"spark-md5":60,"uuid":67,"yields-store":68}],2:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var arity = require('@ndhoule/arity');
+var arity = _dereq_('@ndhoule/arity');
 
 var objToString = Object.prototype.toString;
 
@@ -579,7 +579,7 @@ var after = function after(n, fn) {
 
 module.exports = after;
 
-},{"@ndhoule/arity":3}],3:[function(require,module,exports){
+},{"@ndhoule/arity":3}],3:[function(_dereq_,module,exports){
 'use strict';
 
 var objToString = Object.prototype.toString;
@@ -737,14 +737,14 @@ var arity = function arity(n, func) {
 
 module.exports = arity;
 
-},{}],4:[function(require,module,exports){
+},{}],4:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var type = require('component-type');
+var type = _dereq_('component-type');
 
 /**
  * Deeply clone an object.
@@ -796,15 +796,15 @@ var clone = function clone(obj) {
 
 module.exports = clone;
 
-},{"component-type":45}],5:[function(require,module,exports){
+},{"component-type":45}],5:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var drop = require('@ndhoule/drop');
-var rest = require('@ndhoule/rest');
+var drop = _dereq_('@ndhoule/drop');
+var rest = _dereq_('@ndhoule/rest');
 
 var has = Object.prototype.hasOwnProperty;
 var objToString = Object.prototype.toString;
@@ -948,7 +948,7 @@ var defaults = function(target /*, ...sources */) {
 module.exports = defaults;
 module.exports.deep = defaultsDeep;
 
-},{"@ndhoule/drop":6,"@ndhoule/rest":13}],6:[function(require,module,exports){
+},{"@ndhoule/drop":6,"@ndhoule/rest":13}],6:[function(_dereq_,module,exports){
 'use strict';
 
 var max = Math.max;
@@ -995,14 +995,14 @@ var drop = function drop(count, collection) {
 
 module.exports = drop;
 
-},{}],7:[function(require,module,exports){
+},{}],7:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var keys = require('@ndhoule/keys');
+var keys = _dereq_('@ndhoule/keys');
 
 var objToString = Object.prototype.toString;
 
@@ -1126,14 +1126,14 @@ var each = function each(iterator, collection) {
 
 module.exports = each;
 
-},{"@ndhoule/keys":12}],8:[function(require,module,exports){
+},{"@ndhoule/keys":12}],8:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var each = require('@ndhoule/each');
+var each = _dereq_('@ndhoule/each');
 
 /**
  * Check if a predicate function returns `true` for all values in a `collection`.
@@ -1176,7 +1176,7 @@ var every = function every(predicate, collection) {
 
 module.exports = every;
 
-},{"@ndhoule/each":7}],9:[function(require,module,exports){
+},{"@ndhoule/each":7}],9:[function(_dereq_,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty;
@@ -1221,14 +1221,14 @@ var extend = function extend(dest /*, sources */) {
 
 module.exports = extend;
 
-},{}],10:[function(require,module,exports){
+},{}],10:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var each = require('@ndhoule/each');
+var each = _dereq_('@ndhoule/each');
 
 /**
  * Reduces all the values in a collection down into a single value. Does so by iterating through the
@@ -1277,14 +1277,14 @@ var foldl = function foldl(iterator, accumulator, collection) {
 
 module.exports = foldl;
 
-},{"@ndhoule/each":7}],11:[function(require,module,exports){
+},{"@ndhoule/each":7}],11:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var each = require('@ndhoule/each');
+var each = _dereq_('@ndhoule/each');
 
 var strIndexOf = String.prototype.indexOf;
 
@@ -1361,7 +1361,7 @@ var includes = function includes(searchElement, collection) {
 
 module.exports = includes;
 
-},{"@ndhoule/each":7}],12:[function(require,module,exports){
+},{"@ndhoule/each":7}],12:[function(_dereq_,module,exports){
 'use strict';
 
 var hop = Object.prototype.hasOwnProperty;
@@ -1528,7 +1528,7 @@ var keys = function keys(source) {
 
 module.exports = keys;
 
-},{}],13:[function(require,module,exports){
+},{}],13:[function(_dereq_,module,exports){
 'use strict';
 
 var max = Math.max;
@@ -1568,14 +1568,14 @@ var rest = function rest(collection) {
 
 module.exports = rest;
 
-},{}],14:[function(require,module,exports){
+},{}],14:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var parse = require('component-querystring').parse;
+var parse = _dereq_('component-querystring').parse;
 
 /**
  * All the ad query params we look for.
@@ -1615,21 +1615,21 @@ function ads(query) {
 
 module.exports = ads;
 
-},{"component-querystring":43}],15:[function(require,module,exports){
+},{"component-querystring":43}],15:[function(_dereq_,module,exports){
 'use strict';
 
 /**
  * Module dependencies.
  */
 
-var bind = require('component-bind');
-var clone = require('@ndhoule/clone');
-var debug = require('debug');
-var defaults = require('@ndhoule/defaults');
-var extend = require('@ndhoule/extend');
-var slug = require('slug-component');
-var protos = require('./protos');
-var statics = require('./statics');
+var bind = _dereq_('component-bind');
+var clone = _dereq_('@ndhoule/clone');
+var debug = _dereq_('debug');
+var defaults = _dereq_('@ndhoule/defaults');
+var extend = _dereq_('@ndhoule/extend');
+var slug = _dereq_('slug-component');
+var protos = _dereq_('./protos');
+var statics = _dereq_('./statics');
 
 /**
  * Create a new `Integration` constructor.
@@ -1680,25 +1680,25 @@ function createIntegration(name) {
 
 module.exports = createIntegration;
 
-},{"./protos":16,"./statics":17,"@ndhoule/clone":4,"@ndhoule/defaults":5,"@ndhoule/extend":9,"component-bind":36,"debug":47,"slug-component":59}],16:[function(require,module,exports){
+},{"./protos":16,"./statics":17,"@ndhoule/clone":4,"@ndhoule/defaults":5,"@ndhoule/extend":9,"component-bind":36,"debug":47,"slug-component":59}],16:[function(_dereq_,module,exports){
 'use strict';
 
 /**
  * Module dependencies.
  */
 
-var Emitter = require('component-emitter');
-var after = require('@ndhoule/after');
-var each = require('@ndhoule/each');
-var events = require('analytics-events');
-var every = require('@ndhoule/every');
-var fmt = require('@segment/fmt');
-var foldl = require('@ndhoule/foldl');
-var is = require('is');
-var loadIframe = require('load-iframe');
-var loadScript = require('@segment/load-script');
-var nextTick = require('next-tick');
-var normalize = require('to-no-case');
+var Emitter = _dereq_('component-emitter');
+var after = _dereq_('@ndhoule/after');
+var each = _dereq_('@ndhoule/each');
+var events = _dereq_('analytics-events');
+var every = _dereq_('@ndhoule/every');
+var fmt = _dereq_('@segment/fmt');
+var foldl = _dereq_('@ndhoule/foldl');
+var is = _dereq_('is');
+var loadIframe = _dereq_('load-iframe');
+var loadScript = _dereq_('@segment/load-script');
+var nextTick = _dereq_('next-tick');
+var normalize = _dereq_('to-no-case');
 
 /**
  * hasOwnProperty reference.
@@ -1857,16 +1857,9 @@ exports.invoke = function(method) {
   if (!this[method]) return;
   var args = Array.prototype.slice.call(arguments, 1);
   if (!this._ready) return this.queue(method, args);
-  var ret;
 
-  try {
-    this.debug('%s with %o', method, args);
-    ret = this[method].apply(this, args);
-  } catch (e) {
-    this.debug('error %o calling %s with %o', e, method, args);
-  }
-
-  return ret;
+  this.debug('%s with %o', method, args);
+  return this[method].apply(this, args);
 };
 
 /**
@@ -2163,17 +2156,17 @@ function render(template, locals) {
   }, {}, template.attrs);
 }
 
-},{"@ndhoule/after":2,"@ndhoule/each":7,"@ndhoule/every":8,"@ndhoule/foldl":10,"@segment/fmt":19,"@segment/load-script":20,"analytics-events":35,"component-emitter":41,"is":51,"load-iframe":54,"next-tick":56,"to-no-case":62}],17:[function(require,module,exports){
+},{"@ndhoule/after":2,"@ndhoule/each":7,"@ndhoule/every":8,"@ndhoule/foldl":10,"@segment/fmt":19,"@segment/load-script":20,"analytics-events":35,"component-emitter":41,"is":51,"load-iframe":54,"next-tick":56,"to-no-case":63}],17:[function(_dereq_,module,exports){
 'use strict';
 
 /**
  * Module dependencies.
  */
 
-var Emitter = require('component-emitter');
-var domify = require('domify');
-var each = require('@ndhoule/each');
-var includes = require('@ndhoule/includes');
+var Emitter = _dereq_('component-emitter');
+var domify = _dereq_('domify');
+var each = _dereq_('@ndhoule/each');
+var includes = _dereq_('@ndhoule/includes');
 
 /**
  * Mix in emitter.
@@ -2328,8 +2321,8 @@ function objectify(str) {
   };
 }
 
-},{"@ndhoule/each":7,"@ndhoule/includes":11,"component-emitter":41,"domify":49}],18:[function(require,module,exports){
-var utf8Encode = require('utf8-encode');
+},{"@ndhoule/each":7,"@ndhoule/includes":11,"component-emitter":41,"domify":49}],18:[function(_dereq_,module,exports){
+var utf8Encode = _dereq_('utf8-encode');
 var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
 module.exports = encode;
@@ -2365,7 +2358,7 @@ function encode(input) {
 
     return output;
 }
-},{"utf8-encode":64}],19:[function(require,module,exports){
+},{"utf8-encode":65}],19:[function(_dereq_,module,exports){
 (function (global){
 'use strict';
 
@@ -2400,16 +2393,16 @@ fmt.d = parseInt;
 module.exports = fmt;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],20:[function(require,module,exports){
+},{}],20:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var onload = require('script-onload');
-var tick = require('next-tick');
-var type = require('component-type');
+var onload = _dereq_('script-onload');
+var tick = _dereq_('next-tick');
+var type = _dereq_('component-type');
 
 /**
  * Loads a script asynchronously.
@@ -2472,11 +2465,11 @@ function loadScript(options, cb) {
 
 module.exports = loadScript;
 
-},{"component-type":45,"next-tick":56,"script-onload":58}],21:[function(require,module,exports){
+},{"component-type":45,"next-tick":56,"script-onload":58}],21:[function(_dereq_,module,exports){
 'use strict';
 
-var keys = require('@ndhoule/keys');
-var uuid = require('uuid').v4;
+var keys = _dereq_('@ndhoule/keys');
+var uuid = _dereq_('uuid').v4;
 
 var inMemoryStore = {
   _data: {},
@@ -2537,15 +2530,15 @@ module.exports.defaultEngine = pickStorage();
 // Expose the in-memory store explicitly for testing
 module.exports.inMemoryEngine = inMemoryStore;
 
-},{"@ndhoule/keys":12,"uuid":26}],22:[function(require,module,exports){
+},{"@ndhoule/keys":12,"uuid":26}],22:[function(_dereq_,module,exports){
 'use strict';
 
-var uuid = require('uuid').v4;
-var Store = require('./store');
-var each = require('@ndhoule/each');
-var Schedule = require('./schedule');
-var debug = require('debug')('localstorage-retry');
-var Emitter = require('component-emitter');
+var uuid = _dereq_('uuid').v4;
+var Store = _dereq_('./store');
+var each = _dereq_('@ndhoule/each');
+var Schedule = _dereq_('./schedule');
+var debug = _dereq_('debug')('localstorage-retry');
+var Emitter = _dereq_('component-emitter');
 
 // Some browsers don't support Function.prototype.bind, so just including a simplified version here
 function bind(func, obj) {
@@ -2882,10 +2875,10 @@ Queue.prototype._reclaim = function(id) {
 
 module.exports = Queue;
 
-},{"./schedule":23,"./store":24,"@ndhoule/each":7,"component-emitter":41,"debug":25,"uuid":26}],23:[function(require,module,exports){
+},{"./schedule":23,"./store":24,"@ndhoule/each":7,"component-emitter":41,"debug":25,"uuid":26}],23:[function(_dereq_,module,exports){
 'use strict';
 
-var each = require('@ndhoule/each');
+var each = _dereq_('@ndhoule/each');
 
 var defaultClock = {
   setTimeout: function(fn, ms) {
@@ -2944,14 +2937,14 @@ Schedule.resetClock = function() {
 
 module.exports = Schedule;
 
-},{"@ndhoule/each":7}],24:[function(require,module,exports){
+},{"@ndhoule/each":7}],24:[function(_dereq_,module,exports){
 'use strict';
 
-var defaultEngine = require('./engine').defaultEngine;
-var inMemoryEngine = require('./engine').inMemoryEngine;
-var each = require('@ndhoule/each');
-var keys = require('@ndhoule/keys');
-var json = require('json3');
+var defaultEngine = _dereq_('./engine').defaultEngine;
+var inMemoryEngine = _dereq_('./engine').inMemoryEngine;
+var each = _dereq_('@ndhoule/each');
+var keys = _dereq_('@ndhoule/keys');
+var json = _dereq_('json3');
 
 /**
 * Store Implementation with dedicated
@@ -3071,7 +3064,7 @@ function isQuotaExceeded(e) {
   return quotaExceeded;
 }
 
-},{"./engine":21,"@ndhoule/each":7,"@ndhoule/keys":12,"json3":52}],25:[function(require,module,exports){
+},{"./engine":21,"@ndhoule/each":7,"@ndhoule/keys":12,"json3":52}],25:[function(_dereq_,module,exports){
 
 /**
  * Expose `debug()` as the module.
@@ -3210,9 +3203,9 @@ try {
   if (window.localStorage) debug.enable(localStorage.debug);
 } catch(e){}
 
-},{}],26:[function(require,module,exports){
-var v1 = require('./v1');
-var v4 = require('./v4');
+},{}],26:[function(_dereq_,module,exports){
+var v1 = _dereq_('./v1');
+var v4 = _dereq_('./v4');
 
 var uuid = v4;
 uuid.v1 = v1;
@@ -3220,7 +3213,7 @@ uuid.v4 = v4;
 
 module.exports = uuid;
 
-},{"./v1":29,"./v4":30}],27:[function(require,module,exports){
+},{"./v1":29,"./v4":30}],27:[function(_dereq_,module,exports){
 /**
  * Convert array of 16 byte values to UUID string format of the form:
  * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -3245,31 +3238,31 @@ function bytesToUuid(buf, offset) {
 
 module.exports = bytesToUuid;
 
-},{}],28:[function(require,module,exports){
-(function (global){
+},{}],28:[function(_dereq_,module,exports){
 // Unique ID creation requires a high quality random # generator.  In the
 // browser this is a little complicated due to unknown quality of Math.random()
 // and inconsistent support for the `crypto` API.  We do the best we can via
 // feature-detection
-var rng;
 
-var crypto = global.crypto || global.msCrypto; // for IE 11
-if (crypto && crypto.getRandomValues) {
+// getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
+var getRandomValues = (typeof(crypto) != 'undefined' && crypto.getRandomValues.bind(crypto)) ||
+                      (typeof(msCrypto) != 'undefined' && msCrypto.getRandomValues.bind(msCrypto));
+if (getRandomValues) {
   // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
   var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
-  rng = function whatwgRNG() {
-    crypto.getRandomValues(rnds8);
+
+  module.exports = function whatwgRNG() {
+    getRandomValues(rnds8);
     return rnds8;
   };
-}
-
-if (!rng) {
+} else {
   // Math.random()-based (RNG)
   //
   // If all else fails, use Math.random().  It's fast, but is of unspecified
   // quality.
   var rnds = new Array(16);
-  rng = function() {
+
+  module.exports = function mathRNG() {
     for (var i = 0, r; i < 16; i++) {
       if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
       rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
@@ -3279,32 +3272,21 @@ if (!rng) {
   };
 }
 
-module.exports = rng;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],29:[function(require,module,exports){
-var rng = require('./lib/rng');
-var bytesToUuid = require('./lib/bytesToUuid');
+},{}],29:[function(_dereq_,module,exports){
+var rng = _dereq_('./lib/rng');
+var bytesToUuid = _dereq_('./lib/bytesToUuid');
 
 // **`v1()` - Generate time-based UUID**
 //
 // Inspired by https://github.com/LiosK/UUID.js
 // and http://docs.python.org/library/uuid.html
 
-// random #'s we need to init node and clockseq
-var _seedBytes = rng();
-
-// Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-var _nodeId = [
-  _seedBytes[0] | 0x01,
-  _seedBytes[1], _seedBytes[2], _seedBytes[3], _seedBytes[4], _seedBytes[5]
-];
-
-// Per 4.2.2, randomize (14 bit) clockseq
-var _clockseq = (_seedBytes[6] << 8 | _seedBytes[7]) & 0x3fff;
+var _nodeId;
+var _clockseq;
 
 // Previous uuid creation time
-var _lastMSecs = 0, _lastNSecs = 0;
+var _lastMSecs = 0;
+var _lastNSecs = 0;
 
 // See https://github.com/broofa/node-uuid for API details
 function v1(options, buf, offset) {
@@ -3312,8 +3294,26 @@ function v1(options, buf, offset) {
   var b = buf || [];
 
   options = options || {};
-
+  var node = options.node || _nodeId;
   var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
+
+  // node and clockseq need to be initialized to random values if they're not
+  // specified.  We do this lazily to minimize issues related to insufficient
+  // system entropy.  See #189
+  if (node == null || clockseq == null) {
+    var seedBytes = rng();
+    if (node == null) {
+      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+      node = _nodeId = [
+        seedBytes[0] | 0x01,
+        seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]
+      ];
+    }
+    if (clockseq == null) {
+      // Per 4.2.2, randomize (14 bit) clockseq
+      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
+    }
+  }
 
   // UUID timestamps are 100 nano-second units since the Gregorian epoch,
   // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
@@ -3374,7 +3374,6 @@ function v1(options, buf, offset) {
   b[i++] = clockseq & 0xff;
 
   // `node`
-  var node = options.node || _nodeId;
   for (var n = 0; n < 6; ++n) {
     b[i + n] = node[n];
   }
@@ -3384,15 +3383,15 @@ function v1(options, buf, offset) {
 
 module.exports = v1;
 
-},{"./lib/bytesToUuid":27,"./lib/rng":28}],30:[function(require,module,exports){
-var rng = require('./lib/rng');
-var bytesToUuid = require('./lib/bytesToUuid');
+},{"./lib/bytesToUuid":27,"./lib/rng":28}],30:[function(_dereq_,module,exports){
+var rng = _dereq_('./lib/rng');
+var bytesToUuid = _dereq_('./lib/bytesToUuid');
 
 function v4(options, buf, offset) {
   var i = buf && offset || 0;
 
   if (typeof(options) == 'string') {
-    buf = options == 'binary' ? new Array(16) : null;
+    buf = options === 'binary' ? new Array(16) : null;
     options = null;
   }
   options = options || {};
@@ -3415,7 +3414,7 @@ function v4(options, buf, offset) {
 
 module.exports = v4;
 
-},{"./lib/bytesToUuid":27,"./lib/rng":28}],31:[function(require,module,exports){
+},{"./lib/bytesToUuid":27,"./lib/rng":28}],31:[function(_dereq_,module,exports){
 'use strict';
 
 /**
@@ -3500,17 +3499,17 @@ function set(protocol) {
   }
 }
 
-},{}],32:[function(require,module,exports){
+},{}],32:[function(_dereq_,module,exports){
 'use strict';
 
 /*
  * Module dependencies.
  */
 
-var JSON = require('json3');
-var base64encode = require('@segment/base64-encode');
-var cors = require('has-cors');
-var jsonp = require('jsonp');
+var JSON = _dereq_('json3');
+var base64encode = _dereq_('@segment/base64-encode');
+var cors = _dereq_('has-cors');
+var jsonp = _dereq_('jsonp');
 
 /*
  * Exports.
@@ -3618,15 +3617,15 @@ function encode(obj) {
   return encodeURIComponent(str);
 }
 
-},{"@segment/base64-encode":18,"has-cors":50,"json3":52,"jsonp":53}],33:[function(require,module,exports){
+},{"@segment/base64-encode":18,"has-cors":50,"json3":52,"jsonp":53}],33:[function(_dereq_,module,exports){
 'use strict';
 
 /**
  * Module dependencies.
  */
 
-var parse = require('component-url').parse;
-var cookie = require('component-cookie');
+var parse = _dereq_('component-url').parse;
+var cookie = _dereq_('component-cookie');
 
 /**
  * Get the top domain.
@@ -3718,15 +3717,15 @@ domain.cookie = cookie;
 
 exports = module.exports = domain;
 
-},{"component-cookie":38,"component-url":46}],34:[function(require,module,exports){
+},{"component-cookie":38,"component-url":46}],34:[function(_dereq_,module,exports){
 'use strict';
 
 /**
  * Module dependencies.
  */
 
-var foldl = require('@ndhoule/foldl');
-var parse = require('component-querystring').parse;
+var foldl = _dereq_('@ndhoule/foldl');
+var parse = _dereq_('component-querystring').parse;
 
 /**
  * hasOwnProperty reference.
@@ -3797,7 +3796,7 @@ function strict(query) {
 module.exports = utm;
 module.exports.strict = strict;
 
-},{"@ndhoule/foldl":10,"component-querystring":43}],35:[function(require,module,exports){
+},{"@ndhoule/foldl":10,"component-querystring":43}],35:[function(_dereq_,module,exports){
 
 module.exports = {
   // Promotions
@@ -3864,7 +3863,7 @@ module.exports = {
   pushNotificationBounced: /^[ _]?push[ _]?notification[ _]?bounced[ _]?$/i
 };
 
-},{}],36:[function(require,module,exports){
+},{}],36:[function(_dereq_,module,exports){
 /**
  * Slice reference.
  */
@@ -3889,16 +3888,16 @@ module.exports = function(obj, fn){
   }
 };
 
-},{}],37:[function(require,module,exports){
+},{}],37:[function(_dereq_,module,exports){
 /**
  * Module dependencies.
  */
 
 var type;
 try {
-  type = require('component-type');
+  type = _dereq_('component-type');
 } catch (_) {
-  type = require('type');
+  type = _dereq_('type');
 }
 
 /**
@@ -3948,13 +3947,13 @@ function clone(obj){
   }
 }
 
-},{"component-type":45,"type":45}],38:[function(require,module,exports){
+},{"component-type":45,"type":45}],38:[function(_dereq_,module,exports){
 
 /**
  * Module dependencies.
  */
 
-var debug = require('debug')('cookie');
+var debug = _dereq_('debug')('cookie');
 
 /**
  * Set or get cookie `name` with `value` and `options` object.
@@ -4081,19 +4080,19 @@ function decode(value) {
   }
 }
 
-},{"debug":47}],39:[function(require,module,exports){
+},{"debug":47}],39:[function(_dereq_,module,exports){
 
 /**
  * Module dependencies.
  */
 
 try {
-  var type = require('type');
+  var type = _dereq_('type');
 } catch (err) {
-  var type = require('component-type');
+  var type = _dereq_('component-type');
 }
 
-var toFunction = require('to-function');
+var toFunction = _dereq_('to-function');
 
 /**
  * HOP reference.
@@ -4172,7 +4171,7 @@ function array(obj, fn, ctx) {
   }
 }
 
-},{"component-type":40,"to-function":61,"type":40}],40:[function(require,module,exports){
+},{"component-type":40,"to-function":62,"type":40}],40:[function(_dereq_,module,exports){
 
 /**
  * toString ref.
@@ -4206,7 +4205,7 @@ module.exports = function(val){
   return typeof val;
 };
 
-},{}],41:[function(require,module,exports){
+},{}],41:[function(_dereq_,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -4371,7 +4370,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],42:[function(require,module,exports){
+},{}],42:[function(_dereq_,module,exports){
 /**
  * Global Names
  */
@@ -4458,14 +4457,14 @@ function prefixed(str) {
   };
 }
 
-},{}],43:[function(require,module,exports){
+},{}],43:[function(_dereq_,module,exports){
 
 /**
  * Module dependencies.
  */
 
-var trim = require('trim');
-var type = require('type');
+var trim = _dereq_('trim');
+var type = _dereq_('type');
 
 var pattern = /(\w+)\[(\d+)\]/
 
@@ -4565,7 +4564,7 @@ exports.stringify = function(obj){
   return pairs.join('&');
 };
 
-},{"trim":63,"type":44}],44:[function(require,module,exports){
+},{"trim":64,"type":44}],44:[function(_dereq_,module,exports){
 /**
  * toString ref.
  */
@@ -4601,7 +4600,7 @@ module.exports = function(val){
   return typeof val;
 };
 
-},{}],45:[function(require,module,exports){
+},{}],45:[function(_dereq_,module,exports){
 /**
  * toString ref.
  */
@@ -4649,7 +4648,7 @@ function isBuffer(obj) {
     ))
 }
 
-},{}],46:[function(require,module,exports){
+},{}],46:[function(_dereq_,module,exports){
 
 /**
  * Parse the given `url`.
@@ -4733,7 +4732,7 @@ function port (protocol){
   }
 }
 
-},{}],47:[function(require,module,exports){
+},{}],47:[function(_dereq_,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -4741,7 +4740,7 @@ function port (protocol){
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = require('./debug');
+exports = module.exports = _dereq_('./debug');
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -4921,8 +4920,8 @@ function localstorage() {
   } catch (e) {}
 }
 
-}).call(this,require('_process'))
-},{"./debug":48,"_process":57}],48:[function(require,module,exports){
+}).call(this,_dereq_('_process'))
+},{"./debug":48,"_process":57}],48:[function(_dereq_,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4936,7 +4935,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = require('ms');
+exports.humanize = _dereq_('ms');
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -5126,7 +5125,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":55}],49:[function(require,module,exports){
+},{"ms":55}],49:[function(_dereq_,module,exports){
 
 /**
  * Expose `parse`.
@@ -5240,7 +5239,7 @@ function parse(html, doc) {
   return fragment;
 }
 
-},{}],50:[function(require,module,exports){
+},{}],50:[function(_dereq_,module,exports){
 
 /**
  * Module exports.
@@ -5259,7 +5258,7 @@ try {
   module.exports = false;
 }
 
-},{}],51:[function(require,module,exports){
+},{}],51:[function(_dereq_,module,exports){
 /* globals window, HTMLElement */
 
 'use strict';
@@ -6061,7 +6060,7 @@ is.symbol = function (value) {
 
 module.exports = is;
 
-},{}],52:[function(require,module,exports){
+},{}],52:[function(_dereq_,module,exports){
 (function (global){
 /*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 ;(function () {
@@ -6967,12 +6966,12 @@ module.exports = is;
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],53:[function(require,module,exports){
+},{}],53:[function(_dereq_,module,exports){
 /**
  * Module dependencies
  */
 
-var debug = require('debug')('jsonp');
+var debug = _dereq_('debug')('jsonp');
 
 /**
  * Module exports.
@@ -7066,14 +7065,14 @@ function jsonp(url, opts, fn){
   return cancel;
 }
 
-},{"debug":47}],54:[function(require,module,exports){
+},{"debug":47}],54:[function(_dereq_,module,exports){
 /**
  * Module dependencies.
  */
 
-var is = require('is');
-var onload = require('script-onload');
-var tick = require('next-tick');
+var is = _dereq_('is');
+var onload = _dereq_('script-onload');
+var tick = _dereq_('next-tick');
 
 /**
  * Expose `loadScript`.
@@ -7128,7 +7127,7 @@ module.exports = function loadIframe(options, fn){
   return iframe;
 };
 
-},{"is":51,"next-tick":56,"script-onload":58}],55:[function(require,module,exports){
+},{"is":51,"next-tick":56,"script-onload":58}],55:[function(_dereq_,module,exports){
 /**
  * Helpers.
  */
@@ -7282,8 +7281,8 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],56:[function(require,module,exports){
-(function (process){
+},{}],56:[function(_dereq_,module,exports){
+(function (process,setImmediate){
 'use strict';
 
 var callable, byObserver;
@@ -7349,8 +7348,8 @@ module.exports = (function () {
 	return null;
 }());
 
-}).call(this,require('_process'))
-},{"_process":57}],57:[function(require,module,exports){
+}).call(this,_dereq_('_process'),_dereq_("timers").setImmediate)
+},{"_process":57,"timers":61}],57:[function(_dereq_,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -7536,7 +7535,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],58:[function(require,module,exports){
+},{}],58:[function(_dereq_,module,exports){
 
 // https://github.com/thirdpartyjs/thirdpartyjs-code/blob/master/examples/templates/02/loading-files/index.html
 
@@ -7591,7 +7590,7 @@ function attach(el, fn){
   });
 }
 
-},{}],59:[function(require,module,exports){
+},{}],59:[function(_dereq_,module,exports){
 
 /**
  * Generate a slug from the given `str`.
@@ -7616,7 +7615,7 @@ module.exports = function (str, options) {
     .replace(/ +/g, options.separator || '-')
 };
 
-},{}],60:[function(require,module,exports){
+},{}],60:[function(_dereq_,module,exports){
 (function (factory) {
     if (typeof exports === 'object') {
         // Node/CommonJS
@@ -8321,7 +8320,86 @@ module.exports = function (str, options) {
     return SparkMD5;
 }));
 
-},{}],61:[function(require,module,exports){
+},{}],61:[function(_dereq_,module,exports){
+(function (setImmediate,clearImmediate){
+var nextTick = _dereq_('process/browser.js').nextTick;
+var apply = Function.prototype.apply;
+var slice = Array.prototype.slice;
+var immediateIds = {};
+var nextImmediateId = 0;
+
+// DOM APIs, for completeness
+
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) { timeout.close(); };
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(window, this._id);
+};
+
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
+
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
+
+// That's not how node.js implements it but the exposed api is the same.
+exports.setImmediate = typeof setImmediate === "function" ? setImmediate : function(fn) {
+  var id = nextImmediateId++;
+  var args = arguments.length < 2 ? false : slice.call(arguments, 1);
+
+  immediateIds[id] = true;
+
+  nextTick(function onNextTick() {
+    if (immediateIds[id]) {
+      // fn.call() is faster so we optimize for the common use-case
+      // @see http://jsperf.com/call-apply-segu
+      if (args) {
+        fn.apply(null, args);
+      } else {
+        fn.call(null);
+      }
+      // Prevent ids from leaking
+      exports.clearImmediate(id);
+    }
+  });
+
+  return id;
+};
+
+exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
+  delete immediateIds[id];
+};
+}).call(this,_dereq_("timers").setImmediate,_dereq_("timers").clearImmediate)
+},{"process/browser.js":57,"timers":61}],62:[function(_dereq_,module,exports){
 
 /**
  * Module Dependencies
@@ -8329,9 +8407,9 @@ module.exports = function (str, options) {
 
 var expr;
 try {
-  expr = require('props');
+  expr = _dereq_('props');
 } catch(e) {
-  expr = require('component-props');
+  expr = _dereq_('component-props');
 }
 
 /**
@@ -8475,7 +8553,7 @@ function stripNested (prop, str, val) {
   });
 }
 
-},{"component-props":42,"props":42}],62:[function(require,module,exports){
+},{"component-props":42,"props":42}],63:[function(_dereq_,module,exports){
 
 /**
  * Expose `toNoCase`.
@@ -8547,7 +8625,7 @@ function uncamelize (string) {
     return previous + ' ' + uppers.toLowerCase().split('').join(' ');
   });
 }
-},{}],63:[function(require,module,exports){
+},{}],64:[function(_dereq_,module,exports){
 
 exports = module.exports = trim;
 
@@ -8563,7 +8641,7 @@ exports.right = function(str){
   return str.replace(/\s*$/, '');
 };
 
-},{}],64:[function(require,module,exports){
+},{}],65:[function(_dereq_,module,exports){
 module.exports = encode;
 
 function encode(string) {
@@ -8591,7 +8669,7 @@ function encode(string) {
 
     return utftext;
 }
-},{}],65:[function(require,module,exports){
+},{}],66:[function(_dereq_,module,exports){
 (function (global){
 
 var rng;
@@ -8627,7 +8705,7 @@ module.exports = rng;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],66:[function(require,module,exports){
+},{}],67:[function(_dereq_,module,exports){
 //     uuid.js
 //
 //     Copyright (c) 2010-2012 Robert Kieffer
@@ -8636,7 +8714,7 @@ module.exports = rng;
 // Unique ID creation requires a high quality random # generator.  We feature
 // detect to determine the best RNG source, normalizing to a function that
 // returns 128-bits of randomness, since that's what's usually required
-var _rng = require('./rng');
+var _rng = _dereq_('./rng');
 
 // Maps for number <-> hex string conversion
 var _byteToHex = [];
@@ -8812,14 +8890,14 @@ uuid.unparse = unparse;
 
 module.exports = uuid;
 
-},{"./rng":65}],67:[function(require,module,exports){
+},{"./rng":66}],68:[function(_dereq_,module,exports){
 
 /**
  * dependencies.
  */
 
-var unserialize = require('unserialize');
-var each = require('each');
+var unserialize = _dereq_('unserialize');
+var each = _dereq_('each');
 var storage;
 
 /**
@@ -8907,7 +8985,7 @@ function all(){
   return ret;
 }
 
-},{"each":39,"unserialize":68}],68:[function(require,module,exports){
+},{"each":39,"unserialize":69}],69:[function(_dereq_,module,exports){
 
 /**
  * Unserialize the given "stringified" javascript.
