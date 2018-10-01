@@ -78,3 +78,11 @@ test-browser: install
 test: lint test-browser
 .PHONY: test
 .DEFAULT_GOAL = test
+
+integrations.js: node_modules
+	npm run compile
+
+integration.min.js: integrations.js
+	npm run minify
+
+build: integrations.js integration.min.js
