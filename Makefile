@@ -79,10 +79,10 @@ test: lint test-browser
 .PHONY: test
 .DEFAULT_GOAL = test
 
-integrations.js: node_modules
-	npm run compile
+integrations.js: node_modules package.json package-lock.json
+	npm run compile:debug
 
-integration.min.js: node_modules
-	npm run compile:minified
+integration.min.js: node_modules package.json package-lock.json
+	npm run compile:prod
 
 build: integrations.js integration.min.js
