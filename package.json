@@ -10,8 +10,8 @@
   "main": "integration.js",
   "scripts": {
     "test": "make test",
-    "compile": "browserify lib/index.js  --standalone PrezlyIntegration | derequire > integration.js",
-    "minify": "browserify -t envify -t uglifyify integration.js -o integration.min.js",
+    "compile:debug": "browserify lib/index.js --standalone PrezlyIntegration | DEBUG=true envify | derequire > integration.js",
+    "compile:prod": "browserify lib/index.js --standalone PrezlyIntegration | DEBUG= envify | uglifyjs | derequire > integration.min.js",
     "build": "npm run compile && npm run minify"
   },
   "repository": {
