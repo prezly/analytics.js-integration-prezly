@@ -11,7 +11,7 @@
   "scripts": {
     "test": "make test",
     "compile": "browserify lib/index.js  --standalone PrezlyIntegration | derequire > integration.js",
-    "minify": "browserify -t envify -t uglifyify integration.js -o integration.min.js",
+    "compile:minified": "browserify lib/index.js -t envify -t uglifyify --standalone PrezlyIntegration | derequire > integration.min.js",
     "build": "npm run compile && npm run minify"
   },
   "repository": {

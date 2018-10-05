@@ -82,7 +82,7 @@ test: lint test-browser
 integrations.js: node_modules
 	npm run compile
 
-integration.min.js: integrations.js
-	npm run minify
+integration.min.js: node_modules
+	npm run compile:minified
 
 build: integrations.js integration.min.js
