@@ -504,7 +504,7 @@ function getTld(domain) {
   return domain.split('.').splice(-2).join('.');
 }
 
-},{"@ndhoule/extend":9,"@ndhoule/keys":12,"@segment/ad-params":14,"@segment/analytics.js-integration":15,"@segment/localstorage-retry":22,"@segment/protocol":31,"@segment/send-json":32,"@segment/top-domain":33,"@segment/utm-params":34,"component-clone":37,"component-cookie":38,"json3":52,"spark-md5":60,"uuid":67,"yields-store":68}],2:[function(_dereq_,module,exports){
+},{"@ndhoule/extend":9,"@ndhoule/keys":12,"@segment/ad-params":14,"@segment/analytics.js-integration":15,"@segment/localstorage-retry":22,"@segment/protocol":31,"@segment/send-json":32,"@segment/top-domain":33,"@segment/utm-params":34,"component-clone":37,"component-cookie":38,"json3":55,"spark-md5":63,"uuid":70,"yields-store":71}],2:[function(_dereq_,module,exports){
 'use strict';
 
 /*
@@ -796,7 +796,7 @@ var clone = function clone(obj) {
 
 module.exports = clone;
 
-},{"component-type":45}],5:[function(_dereq_,module,exports){
+},{"component-type":48}],5:[function(_dereq_,module,exports){
 'use strict';
 
 /*
@@ -1615,7 +1615,7 @@ function ads(query) {
 
 module.exports = ads;
 
-},{"component-querystring":43}],15:[function(_dereq_,module,exports){
+},{"component-querystring":46}],15:[function(_dereq_,module,exports){
 'use strict';
 
 /**
@@ -1680,7 +1680,7 @@ function createIntegration(name) {
 
 module.exports = createIntegration;
 
-},{"./protos":16,"./statics":17,"@ndhoule/clone":4,"@ndhoule/defaults":5,"@ndhoule/extend":9,"component-bind":36,"debug":47,"slug-component":59}],16:[function(_dereq_,module,exports){
+},{"./protos":16,"./statics":17,"@ndhoule/clone":4,"@ndhoule/defaults":5,"@ndhoule/extend":9,"component-bind":36,"debug":50,"slug-component":62}],16:[function(_dereq_,module,exports){
 'use strict';
 
 /**
@@ -2156,7 +2156,7 @@ function render(template, locals) {
   }, {}, template.attrs);
 }
 
-},{"@ndhoule/after":2,"@ndhoule/each":7,"@ndhoule/every":8,"@ndhoule/foldl":10,"@segment/fmt":19,"@segment/load-script":20,"analytics-events":35,"component-emitter":41,"is":51,"load-iframe":54,"next-tick":56,"to-no-case":63}],17:[function(_dereq_,module,exports){
+},{"@ndhoule/after":2,"@ndhoule/each":7,"@ndhoule/every":8,"@ndhoule/foldl":10,"@segment/fmt":19,"@segment/load-script":20,"analytics-events":35,"component-emitter":44,"is":54,"load-iframe":57,"next-tick":59,"to-no-case":66}],17:[function(_dereq_,module,exports){
 'use strict';
 
 /**
@@ -2321,7 +2321,7 @@ function objectify(str) {
   };
 }
 
-},{"@ndhoule/each":7,"@ndhoule/includes":11,"component-emitter":41,"domify":49}],18:[function(_dereq_,module,exports){
+},{"@ndhoule/each":7,"@ndhoule/includes":11,"component-emitter":44,"domify":52}],18:[function(_dereq_,module,exports){
 var utf8Encode = _dereq_('utf8-encode');
 var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
@@ -2358,7 +2358,7 @@ function encode(input) {
 
     return output;
 }
-},{"utf8-encode":65}],19:[function(_dereq_,module,exports){
+},{"utf8-encode":68}],19:[function(_dereq_,module,exports){
 (function (global){
 'use strict';
 
@@ -2465,7 +2465,7 @@ function loadScript(options, cb) {
 
 module.exports = loadScript;
 
-},{"component-type":45,"next-tick":56,"script-onload":58}],21:[function(_dereq_,module,exports){
+},{"component-type":48,"next-tick":59,"script-onload":61}],21:[function(_dereq_,module,exports){
 'use strict';
 
 var keys = _dereq_('@ndhoule/keys');
@@ -2729,18 +2729,7 @@ Queue.prototype._processHead = function() {
   var now = this._schedule.now();
   var toRun = [];
 
-  while (queue.length && queue[0].time <= now) {
-    var el = queue.shift();
-
-    var id = uuid();
-
-    // Save this to the in progress map
-    inProgress[id] = {
-      item: el.item,
-      attemptNumber: el.attemptNumber,
-      time: this._schedule.now()
-    };
-
+  function enqueue(el, id) {
     toRun.push({
       item: el.item,
       done: function handle(err, res) {
@@ -2753,6 +2742,22 @@ Queue.prototype._processHead = function() {
         }
       }
     });
+  }
+
+  var inProgressSize = Object.keys(inProgress).length;
+
+  while (queue.length && queue[0].time <= now && inProgressSize++ < self.maxItems) {
+    var el = queue.shift();
+    var id = uuid();
+
+    // Save this to the in progress map
+    inProgress[id] = {
+      item: el.item,
+      attemptNumber: el.attemptNumber,
+      time: self._schedule.now()
+    };
+
+    enqueue(el, id);
   }
 
   store.set(this.keys.QUEUE, queue);
@@ -2838,20 +2843,20 @@ Queue.prototype._reclaim = function(id) {
     queue: other.get(this.keys.QUEUE) || []
   };
 
-  // add their queue to ours, resetting run-time to immediate and attempt# to 0
+  // add their queue to ours, resetting run-time to immediate and copying the attempt#
   each(function(el) {
     our.queue.push({
       item: el.item,
-      attemptNumber: 0,
+      attemptNumber: el.attemptNumber,
       time: self._schedule.now()
     });
   }, their.queue);
 
-  // if the queue is abandoned, all the in-progress are failed. retry them immediately and reset the attempt#
+  // if the queue is abandoned, all the in-progress are failed. retry them immediately and increment the attempt#
   each(function(el) {
     our.queue.push({
       item: el.item,
-      attemptNumber: 0,
+      attemptNumber: el.attemptNumber + 1,
       time: self._schedule.now()
     });
   }, their.inProgress);
@@ -2875,7 +2880,7 @@ Queue.prototype._reclaim = function(id) {
 
 module.exports = Queue;
 
-},{"./schedule":23,"./store":24,"@ndhoule/each":7,"component-emitter":41,"debug":25,"uuid":26}],23:[function(_dereq_,module,exports){
+},{"./schedule":23,"./store":24,"@ndhoule/each":7,"component-emitter":44,"debug":25,"uuid":26}],23:[function(_dereq_,module,exports){
 'use strict';
 
 var each = _dereq_('@ndhoule/each');
@@ -3064,7 +3069,7 @@ function isQuotaExceeded(e) {
   return quotaExceeded;
 }
 
-},{"./engine":21,"@ndhoule/each":7,"@ndhoule/keys":12,"json3":52}],25:[function(_dereq_,module,exports){
+},{"./engine":21,"@ndhoule/each":7,"@ndhoule/keys":12,"json3":55}],25:[function(_dereq_,module,exports){
 
 /**
  * Expose `debug()` as the module.
@@ -3226,14 +3231,15 @@ for (var i = 0; i < 256; ++i) {
 function bytesToUuid(buf, offset) {
   var i = offset || 0;
   var bth = byteToHex;
-  return bth[buf[i++]] + bth[buf[i++]] +
-          bth[buf[i++]] + bth[buf[i++]] + '-' +
-          bth[buf[i++]] + bth[buf[i++]] + '-' +
-          bth[buf[i++]] + bth[buf[i++]] + '-' +
-          bth[buf[i++]] + bth[buf[i++]] + '-' +
-          bth[buf[i++]] + bth[buf[i++]] +
-          bth[buf[i++]] + bth[buf[i++]] +
-          bth[buf[i++]] + bth[buf[i++]];
+  // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
+  return ([bth[buf[i++]], bth[buf[i++]], 
+	bth[buf[i++]], bth[buf[i++]], '-',
+	bth[buf[i++]], bth[buf[i++]], '-',
+	bth[buf[i++]], bth[buf[i++]], '-',
+	bth[buf[i++]], bth[buf[i++]], '-',
+	bth[buf[i++]], bth[buf[i++]],
+	bth[buf[i++]], bth[buf[i++]],
+	bth[buf[i++]], bth[buf[i++]]]).join('');
 }
 
 module.exports = bytesToUuid;
@@ -3244,9 +3250,11 @@ module.exports = bytesToUuid;
 // and inconsistent support for the `crypto` API.  We do the best we can via
 // feature-detection
 
-// getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
-var getRandomValues = (typeof(crypto) != 'undefined' && crypto.getRandomValues.bind(crypto)) ||
-                      (typeof(msCrypto) != 'undefined' && msCrypto.getRandomValues.bind(msCrypto));
+// getRandomValues needs to be invoked in a context where "this" is a Crypto
+// implementation. Also, find the complete implementation of crypto on IE11.
+var getRandomValues = (typeof(crypto) != 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto)) ||
+                      (typeof(msCrypto) != 'undefined' && typeof window.msCrypto.getRandomValues == 'function' && msCrypto.getRandomValues.bind(msCrypto));
+
 if (getRandomValues) {
   // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
   var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
@@ -3617,7 +3625,7 @@ function encode(obj) {
   return encodeURIComponent(str);
 }
 
-},{"@segment/base64-encode":18,"has-cors":50,"json3":52,"jsonp":53}],33:[function(_dereq_,module,exports){
+},{"@segment/base64-encode":18,"has-cors":53,"json3":55,"jsonp":56}],33:[function(_dereq_,module,exports){
 'use strict';
 
 /**
@@ -3717,7 +3725,7 @@ domain.cookie = cookie;
 
 exports = module.exports = domain;
 
-},{"component-cookie":38,"component-url":46}],34:[function(_dereq_,module,exports){
+},{"component-cookie":38,"component-url":49}],34:[function(_dereq_,module,exports){
 'use strict';
 
 /**
@@ -3796,7 +3804,7 @@ function strict(query) {
 module.exports = utm;
 module.exports.strict = strict;
 
-},{"@ndhoule/foldl":10,"component-querystring":43}],35:[function(_dereq_,module,exports){
+},{"@ndhoule/foldl":10,"component-querystring":46}],35:[function(_dereq_,module,exports){
 
 module.exports = {
   // Promotions
@@ -3947,7 +3955,7 @@ function clone(obj){
   }
 }
 
-},{"component-type":45,"type":45}],38:[function(_dereq_,module,exports){
+},{"component-type":48,"type":48}],38:[function(_dereq_,module,exports){
 
 /**
  * Module dependencies.
@@ -4080,7 +4088,503 @@ function decode(value) {
   }
 }
 
-},{"debug":47}],39:[function(_dereq_,module,exports){
+},{"debug":39}],39:[function(_dereq_,module,exports){
+
+/**
+ * This is the web browser implementation of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = _dereq_('./debug');
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = 'undefined' != typeof chrome
+               && 'undefined' != typeof chrome.storage
+                  ? chrome.storage.local
+                  : localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+  'lightseagreen',
+  'forestgreen',
+  'goldenrod',
+  'dodgerblue',
+  'darkorchid',
+  'crimson'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+function useColors() {
+  // is webkit? http://stackoverflow.com/a/16459606/376773
+  return ('WebkitAppearance' in document.documentElement.style) ||
+    // is firebug? http://stackoverflow.com/a/398120/376773
+    (window.console && (console.firebug || (console.exception && console.table))) ||
+    // is firefox >= v31?
+    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+}
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+exports.formatters.j = function(v) {
+  return JSON.stringify(v);
+};
+
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs() {
+  var args = arguments;
+  var useColors = this.useColors;
+
+  args[0] = (useColors ? '%c' : '')
+    + this.namespace
+    + (useColors ? ' %c' : ' ')
+    + args[0]
+    + (useColors ? '%c ' : ' ')
+    + '+' + exports.humanize(this.diff);
+
+  if (!useColors) return args;
+
+  var c = 'color: ' + this.color;
+  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
+
+  // the final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+  var index = 0;
+  var lastC = 0;
+  args[0].replace(/%[a-z%]/g, function(match) {
+    if ('%%' === match) return;
+    index++;
+    if ('%c' === match) {
+      // we only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+
+  args.splice(lastC, 0, c);
+  return args;
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+function log() {
+  // this hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return 'object' === typeof console
+    && console.log
+    && Function.prototype.apply.call(console.log, console, arguments);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+function save(namespaces) {
+  try {
+    if (null == namespaces) {
+      exports.storage.removeItem('debug');
+    } else {
+      exports.storage.debug = namespaces;
+    }
+  } catch(e) {}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+function load() {
+  var r;
+  try {
+    r = exports.storage.debug;
+  } catch(e) {}
+  return r;
+}
+
+/**
+ * Enable namespaces listed in `localStorage.debug` initially.
+ */
+
+exports.enable(load());
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage(){
+  try {
+    return window.localStorage;
+  } catch (e) {}
+}
+
+},{"./debug":40}],40:[function(_dereq_,module,exports){
+
+/**
+ * This is the common logic for both the Node.js and web browser
+ * implementations of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = debug;
+exports.coerce = coerce;
+exports.disable = disable;
+exports.enable = enable;
+exports.enabled = enabled;
+exports.humanize = _dereq_('ms');
+
+/**
+ * The currently active debug mode names, and names to skip.
+ */
+
+exports.names = [];
+exports.skips = [];
+
+/**
+ * Map of special "%n" handling functions, for the debug "format" argument.
+ *
+ * Valid key names are a single, lowercased letter, i.e. "n".
+ */
+
+exports.formatters = {};
+
+/**
+ * Previously assigned color.
+ */
+
+var prevColor = 0;
+
+/**
+ * Previous log timestamp.
+ */
+
+var prevTime;
+
+/**
+ * Select a color.
+ *
+ * @return {Number}
+ * @api private
+ */
+
+function selectColor() {
+  return exports.colors[prevColor++ % exports.colors.length];
+}
+
+/**
+ * Create a debugger with the given `namespace`.
+ *
+ * @param {String} namespace
+ * @return {Function}
+ * @api public
+ */
+
+function debug(namespace) {
+
+  // define the `disabled` version
+  function disabled() {
+  }
+  disabled.enabled = false;
+
+  // define the `enabled` version
+  function enabled() {
+
+    var self = enabled;
+
+    // set `diff` timestamp
+    var curr = +new Date();
+    var ms = curr - (prevTime || curr);
+    self.diff = ms;
+    self.prev = prevTime;
+    self.curr = curr;
+    prevTime = curr;
+
+    // add the `color` if not set
+    if (null == self.useColors) self.useColors = exports.useColors();
+    if (null == self.color && self.useColors) self.color = selectColor();
+
+    var args = Array.prototype.slice.call(arguments);
+
+    args[0] = exports.coerce(args[0]);
+
+    if ('string' !== typeof args[0]) {
+      // anything else let's inspect with %o
+      args = ['%o'].concat(args);
+    }
+
+    // apply any `formatters` transformations
+    var index = 0;
+    args[0] = args[0].replace(/%([a-z%])/g, function(match, format) {
+      // if we encounter an escaped % then don't increase the array index
+      if (match === '%%') return match;
+      index++;
+      var formatter = exports.formatters[format];
+      if ('function' === typeof formatter) {
+        var val = args[index];
+        match = formatter.call(self, val);
+
+        // now we need to remove `args[index]` since it's inlined in the `format`
+        args.splice(index, 1);
+        index--;
+      }
+      return match;
+    });
+
+    if ('function' === typeof exports.formatArgs) {
+      args = exports.formatArgs.apply(self, args);
+    }
+    var logFn = enabled.log || exports.log || console.log.bind(console);
+    logFn.apply(self, args);
+  }
+  enabled.enabled = true;
+
+  var fn = exports.enabled(namespace) ? enabled : disabled;
+
+  fn.namespace = namespace;
+
+  return fn;
+}
+
+/**
+ * Enables a debug mode by namespaces. This can include modes
+ * separated by a colon and wildcards.
+ *
+ * @param {String} namespaces
+ * @api public
+ */
+
+function enable(namespaces) {
+  exports.save(namespaces);
+
+  var split = (namespaces || '').split(/[\s,]+/);
+  var len = split.length;
+
+  for (var i = 0; i < len; i++) {
+    if (!split[i]) continue; // ignore empty strings
+    namespaces = split[i].replace(/\*/g, '.*?');
+    if (namespaces[0] === '-') {
+      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+    } else {
+      exports.names.push(new RegExp('^' + namespaces + '$'));
+    }
+  }
+}
+
+/**
+ * Disable debug output.
+ *
+ * @api public
+ */
+
+function disable() {
+  exports.enable('');
+}
+
+/**
+ * Returns true if the given mode name is enabled, false otherwise.
+ *
+ * @param {String} name
+ * @return {Boolean}
+ * @api public
+ */
+
+function enabled(name) {
+  var i, len;
+  for (i = 0, len = exports.skips.length; i < len; i++) {
+    if (exports.skips[i].test(name)) {
+      return false;
+    }
+  }
+  for (i = 0, len = exports.names.length; i < len; i++) {
+    if (exports.names[i].test(name)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Coerce `val`.
+ *
+ * @param {Mixed} val
+ * @return {Mixed}
+ * @api private
+ */
+
+function coerce(val) {
+  if (val instanceof Error) return val.stack || val.message;
+  return val;
+}
+
+},{"ms":41}],41:[function(_dereq_,module,exports){
+/**
+ * Helpers.
+ */
+
+var s = 1000;
+var m = s * 60;
+var h = m * 60;
+var d = h * 24;
+var y = d * 365.25;
+
+/**
+ * Parse or format the given `val`.
+ *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} options
+ * @return {String|Number}
+ * @api public
+ */
+
+module.exports = function(val, options){
+  options = options || {};
+  if ('string' == typeof val) return parse(val);
+  return options.long
+    ? long(val)
+    : short(val);
+};
+
+/**
+ * Parse the given `str` and return milliseconds.
+ *
+ * @param {String} str
+ * @return {Number}
+ * @api private
+ */
+
+function parse(str) {
+  str = '' + str;
+  if (str.length > 10000) return;
+  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(str);
+  if (!match) return;
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
+  switch (type) {
+    case 'years':
+    case 'year':
+    case 'yrs':
+    case 'yr':
+    case 'y':
+      return n * y;
+    case 'days':
+    case 'day':
+    case 'd':
+      return n * d;
+    case 'hours':
+    case 'hour':
+    case 'hrs':
+    case 'hr':
+    case 'h':
+      return n * h;
+    case 'minutes':
+    case 'minute':
+    case 'mins':
+    case 'min':
+    case 'm':
+      return n * m;
+    case 'seconds':
+    case 'second':
+    case 'secs':
+    case 'sec':
+    case 's':
+      return n * s;
+    case 'milliseconds':
+    case 'millisecond':
+    case 'msecs':
+    case 'msec':
+    case 'ms':
+      return n;
+  }
+}
+
+/**
+ * Short format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function short(ms) {
+  if (ms >= d) return Math.round(ms / d) + 'd';
+  if (ms >= h) return Math.round(ms / h) + 'h';
+  if (ms >= m) return Math.round(ms / m) + 'm';
+  if (ms >= s) return Math.round(ms / s) + 's';
+  return ms + 'ms';
+}
+
+/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function long(ms) {
+  return plural(ms, d, 'day')
+    || plural(ms, h, 'hour')
+    || plural(ms, m, 'minute')
+    || plural(ms, s, 'second')
+    || ms + ' ms';
+}
+
+/**
+ * Pluralization helper.
+ */
+
+function plural(ms, n, name) {
+  if (ms < n) return;
+  if (ms < n * 1.5) return Math.floor(ms / n) + ' ' + name;
+  return Math.ceil(ms / n) + ' ' + name + 's';
+}
+
+},{}],42:[function(_dereq_,module,exports){
 
 /**
  * Module dependencies.
@@ -4171,7 +4675,7 @@ function array(obj, fn, ctx) {
   }
 }
 
-},{"component-type":40,"to-function":62,"type":40}],40:[function(_dereq_,module,exports){
+},{"component-type":43,"to-function":65,"type":43}],43:[function(_dereq_,module,exports){
 
 /**
  * toString ref.
@@ -4205,7 +4709,7 @@ module.exports = function(val){
   return typeof val;
 };
 
-},{}],41:[function(_dereq_,module,exports){
+},{}],44:[function(_dereq_,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -4370,7 +4874,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],42:[function(_dereq_,module,exports){
+},{}],45:[function(_dereq_,module,exports){
 /**
  * Global Names
  */
@@ -4457,7 +4961,7 @@ function prefixed(str) {
   };
 }
 
-},{}],43:[function(_dereq_,module,exports){
+},{}],46:[function(_dereq_,module,exports){
 
 /**
  * Module dependencies.
@@ -4564,7 +5068,7 @@ exports.stringify = function(obj){
   return pairs.join('&');
 };
 
-},{"trim":64,"type":44}],44:[function(_dereq_,module,exports){
+},{"trim":67,"type":47}],47:[function(_dereq_,module,exports){
 /**
  * toString ref.
  */
@@ -4600,7 +5104,7 @@ module.exports = function(val){
   return typeof val;
 };
 
-},{}],45:[function(_dereq_,module,exports){
+},{}],48:[function(_dereq_,module,exports){
 /**
  * toString ref.
  */
@@ -4648,7 +5152,7 @@ function isBuffer(obj) {
     ))
 }
 
-},{}],46:[function(_dereq_,module,exports){
+},{}],49:[function(_dereq_,module,exports){
 
 /**
  * Parse the given `url`.
@@ -4732,7 +5236,7 @@ function port (protocol){
   }
 }
 
-},{}],47:[function(_dereq_,module,exports){
+},{}],50:[function(_dereq_,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -4921,7 +5425,7 @@ function localstorage() {
 }
 
 }).call(this,_dereq_('_process'))
-},{"./debug":48,"_process":57}],48:[function(_dereq_,module,exports){
+},{"./debug":51,"_process":60}],51:[function(_dereq_,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -5125,7 +5629,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":55}],49:[function(_dereq_,module,exports){
+},{"ms":58}],52:[function(_dereq_,module,exports){
 
 /**
  * Expose `parse`.
@@ -5239,7 +5743,7 @@ function parse(html, doc) {
   return fragment;
 }
 
-},{}],50:[function(_dereq_,module,exports){
+},{}],53:[function(_dereq_,module,exports){
 
 /**
  * Module exports.
@@ -5258,7 +5762,7 @@ try {
   module.exports = false;
 }
 
-},{}],51:[function(_dereq_,module,exports){
+},{}],54:[function(_dereq_,module,exports){
 /* globals window, HTMLElement */
 
 'use strict';
@@ -6060,7 +6564,7 @@ is.symbol = function (value) {
 
 module.exports = is;
 
-},{}],52:[function(_dereq_,module,exports){
+},{}],55:[function(_dereq_,module,exports){
 (function (global){
 /*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 ;(function () {
@@ -6966,7 +7470,7 @@ module.exports = is;
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],53:[function(_dereq_,module,exports){
+},{}],56:[function(_dereq_,module,exports){
 /**
  * Module dependencies
  */
@@ -7065,7 +7569,7 @@ function jsonp(url, opts, fn){
   return cancel;
 }
 
-},{"debug":47}],54:[function(_dereq_,module,exports){
+},{"debug":50}],57:[function(_dereq_,module,exports){
 /**
  * Module dependencies.
  */
@@ -7127,7 +7631,7 @@ module.exports = function loadIframe(options, fn){
   return iframe;
 };
 
-},{"is":51,"next-tick":56,"script-onload":58}],55:[function(_dereq_,module,exports){
+},{"is":54,"next-tick":59,"script-onload":61}],58:[function(_dereq_,module,exports){
 /**
  * Helpers.
  */
@@ -7281,7 +7785,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],56:[function(_dereq_,module,exports){
+},{}],59:[function(_dereq_,module,exports){
 (function (process,setImmediate){
 'use strict';
 
@@ -7349,7 +7853,7 @@ module.exports = (function () {
 }());
 
 }).call(this,_dereq_('_process'),_dereq_("timers").setImmediate)
-},{"_process":57,"timers":61}],57:[function(_dereq_,module,exports){
+},{"_process":60,"timers":64}],60:[function(_dereq_,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -7535,7 +8039,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],58:[function(_dereq_,module,exports){
+},{}],61:[function(_dereq_,module,exports){
 
 // https://github.com/thirdpartyjs/thirdpartyjs-code/blob/master/examples/templates/02/loading-files/index.html
 
@@ -7590,7 +8094,7 @@ function attach(el, fn){
   });
 }
 
-},{}],59:[function(_dereq_,module,exports){
+},{}],62:[function(_dereq_,module,exports){
 
 /**
  * Generate a slug from the given `str`.
@@ -7615,7 +8119,7 @@ module.exports = function (str, options) {
     .replace(/ +/g, options.separator || '-')
 };
 
-},{}],60:[function(_dereq_,module,exports){
+},{}],63:[function(_dereq_,module,exports){
 (function (factory) {
     if (typeof exports === 'object') {
         // Node/CommonJS
@@ -8320,7 +8824,7 @@ module.exports = function (str, options) {
     return SparkMD5;
 }));
 
-},{}],61:[function(_dereq_,module,exports){
+},{}],64:[function(_dereq_,module,exports){
 (function (setImmediate,clearImmediate){
 var nextTick = _dereq_('process/browser.js').nextTick;
 var apply = Function.prototype.apply;
@@ -8399,7 +8903,7 @@ exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate :
   delete immediateIds[id];
 };
 }).call(this,_dereq_("timers").setImmediate,_dereq_("timers").clearImmediate)
-},{"process/browser.js":57,"timers":61}],62:[function(_dereq_,module,exports){
+},{"process/browser.js":60,"timers":64}],65:[function(_dereq_,module,exports){
 
 /**
  * Module Dependencies
@@ -8553,7 +9057,7 @@ function stripNested (prop, str, val) {
   });
 }
 
-},{"component-props":42,"props":42}],63:[function(_dereq_,module,exports){
+},{"component-props":45,"props":45}],66:[function(_dereq_,module,exports){
 
 /**
  * Expose `toNoCase`.
@@ -8625,7 +9129,7 @@ function uncamelize (string) {
     return previous + ' ' + uppers.toLowerCase().split('').join(' ');
   });
 }
-},{}],64:[function(_dereq_,module,exports){
+},{}],67:[function(_dereq_,module,exports){
 
 exports = module.exports = trim;
 
@@ -8641,7 +9145,7 @@ exports.right = function(str){
   return str.replace(/\s*$/, '');
 };
 
-},{}],65:[function(_dereq_,module,exports){
+},{}],68:[function(_dereq_,module,exports){
 module.exports = encode;
 
 function encode(string) {
@@ -8669,7 +9173,7 @@ function encode(string) {
 
     return utftext;
 }
-},{}],66:[function(_dereq_,module,exports){
+},{}],69:[function(_dereq_,module,exports){
 (function (global){
 
 var rng;
@@ -8705,7 +9209,7 @@ module.exports = rng;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],67:[function(_dereq_,module,exports){
+},{}],70:[function(_dereq_,module,exports){
 //     uuid.js
 //
 //     Copyright (c) 2010-2012 Robert Kieffer
@@ -8890,7 +9394,7 @@ uuid.unparse = unparse;
 
 module.exports = uuid;
 
-},{"./rng":66}],68:[function(_dereq_,module,exports){
+},{"./rng":69}],71:[function(_dereq_,module,exports){
 
 /**
  * dependencies.
@@ -8985,7 +9489,7 @@ function all(){
   return ret;
 }
 
-},{"each":39,"unserialize":69}],69:[function(_dereq_,module,exports){
+},{"each":42,"unserialize":72}],72:[function(_dereq_,module,exports){
 
 /**
  * Unserialize the given "stringified" javascript.
